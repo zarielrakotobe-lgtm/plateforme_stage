@@ -73,7 +73,7 @@ class Candidature(models.Model):
 
 class Notifications(models.Model):
     code_n=models.AutoField(primary_key=True)
-    message=models.CharField(max_length=200)
+    message=models.CharField(max_length=255)
     lue=models.BooleanField(default=False)
     date_creation=models.DateField(auto_now_add=True)
     user=models.ForeignKey("User",on_delete=models.CASCADE,related_name='notif')

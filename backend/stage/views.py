@@ -145,8 +145,13 @@ def changerStatut(request,pk):
     cand.statut= statut
     cand.save()
 
-    mot = "acceptee" if statut =='acceptee' else "refuse"
-    creer_notification(cand.etudiant.user,f"Votre candidature pour {cand.offre.titre} a ete {mot} par {cand.offre.entreprise}")
+    entreprise = cand.offre.entreprise
+    mail = entreprise.email or entreprise.user.email or entreprise.user.username
+    mot = "acceptee" if statut == 'acceptee' else "refusee"
+    message = f"candidature {cand.offre.titre} {mot} par {entreprise}."
+    if statut == 'acceptee':
+        message += f" Contacter: {mail}"
+    creer_notification(cand.etudiant.user, message[:200])
     return Response(CandidatureSerializers(cand,context={'request':request}).data)
 
 class mesNotifications(generics.ListAPIView):
